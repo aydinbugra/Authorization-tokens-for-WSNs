@@ -1,6 +1,7 @@
 from request_model import Request
 from passlib.hash import pbkdf2_sha256 as hasher
 import pickle
+import random
 
 class Client:
     def __init__(self,key=""):
@@ -10,6 +11,7 @@ class Client:
         self.gateway = gateway
 
     def create_token(self,payload):
+        payload['random_num'] = random.randbytes(4)
         request = Request(payload)
         request.hash = hasher.hash(str(request.payload) + str(request.timestamp) + self.key)
         self.request = request
