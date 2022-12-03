@@ -1,5 +1,6 @@
 from request_model import Request
 from passlib.hash import pbkdf2_sha256 as hasher
+import pickle
 
 class Client:
     def __init__(self,key=""):
@@ -8,11 +9,11 @@ class Client:
     def connect(self,gateway):
         self.gateway = gateway
 
-    def create_request(self,payload):
+    def create_token(self,payload):
         request = Request(payload)
         request.hash = hasher.hash(str(request.payload) + str(request.timestamp) + self.key)
         self.request = request
-        return request
+        return pickle.dumps(request)
 
     def send_request(self, request = None):
         if request == None:
